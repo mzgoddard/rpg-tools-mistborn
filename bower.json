@@ -1,0 +1,10 @@
+{
+  "name": "mistborn-dice-ember",
+  "version": "0.0.0",
+  "description": "Easy mistborn dice roller in ember.",
+  "dependencies": {
+    "ember": "~1.7.1",
+    "orbit": "*",
+    "ember-orbit": "~0.4.1"
+  }
+}

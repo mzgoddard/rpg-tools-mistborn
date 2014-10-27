@@ -1,0 +1,20 @@
+{{#link-to 'application'}}index{{/link-to}}
+
+<div>
+{{#each diceOptions}}
+  <span {{action 'rollDice' dice}} class="roll-button" {{bind-attr title='chanceList'}}>
+    {{dice}}
+  </span>
+{{/each}}
+</div>
+
+<ul>
+{{#each}}
+  <li>
+  {{highestPair}} {{nudges}} {{highestPairChancePercent}}:
+  {{#each rolls}}
+    {{roll}}
+  {{/each}}
+  </li>
+{{/each}}
+</ul>
