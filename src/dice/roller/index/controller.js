@@ -1,38 +1,10 @@
+const probability = require('../../../utils/dicemath').probability;
+
 module.exports = Ember.ArrayController.extend({
-  diceOptions: function() {
-    var options = [];
-    for (var i = 2; i <= 10; i++) {
-      options.push(Ember.Object.createWithMixins({
-        dice: i,
+  needs: ['dice'],
+  diceController: Ember.computed.alias('controllers.dice'),
 
-        chances: function() {
-          var chances = [];
-          for (var j = 0; j < 6; j++) {
-            var probabilityValue = probability(j, this.get('dice'));
-            if (j === 0) {
-              probabilityValue = 1 - probability(1, this.get('dice'));
-            }
-            var percent = Math.floor(probabilityValue * 100);
-            chances.push(Ember.Object.create({
-              pair: j,
-              percent: percent,
-            }));
-          }
-          return chances;
-        }.property(),
-
-        chanceList: function() {
-          return this.get('chances').reduce(function(v, a) {
-            if (!v) {
-              return a.get('pair') + ' ' + a.get('percent');
-            }
-            return v + ', ' + a.get('pair') + ' ' + a.get('percent');
-          }, '');
-        }.property('chances'),
-      }));
-    }
-    return options;
-  }.property(),
+  diceOptions: Ember.computed.alias('diceController.optionsTable'),
 
   roll: function(diceCount) {
     var dice = [];
@@ -92,43 +64,3 @@ var RollSet = Ember.Object.extend({
     return Math.floor(this.get('highestPairChance') * 100);
   }.property('highestPairChance'),
 });
-
-function factorial( n ) {
-  return n > 1 ? n * factorial( n - 1 ) : 1;
-}
-
-function binom( n, k ) {
-  return factorial( n ) / ( factorial( n - k ) * factorial( k ) );
-}
-
-function expand( pair, sides, dice, countSub2 ) {
-  if ( dice === 0 ) {
-    return 1;
-  }
-  if ( dice === 1 ) {
-    return sides;
-  }
-  if ( sides === 1 ) {
-    return 1;
-  }
-  var sum = 0, k;
-  if ( sides > pair ) {
-    k = 2;
-    for ( ; k <= dice; k++ ) {
-      sum += binom( dice, k ) * expand( pair, sides - 1, k );
-    }
-  } else {
-    k = 0;
-    for ( ; k <= dice; k++ ) {
-      if ( countSub2 || dice - k >= 2 || k >= 2 ) {
-        sum += binom( dice, k ) * expand( pair, sides - 1, k, countSub2 || dice - k > 1 );
-      }
-    }
-  }
-
-  return sum;
-}
-
-function probability( highest, dice ) {
-  return expand( 6 - highest, 6, dice ) / Math.pow( 6, dice );
-}
