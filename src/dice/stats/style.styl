@@ -1,0 +1,26 @@
+@import 'nib';
+
+.dice-stats {
+  tr {
+    display: flex;
+  }
+
+  td, th {
+    flex: 1;
+    font-size: 2rem;
+    text-align: right;
+    margin: 1vw;
+  }
+
+  .column-head {
+    text-align: left;
+  }
+}
+
+@media (max-device-width: 5in) {
+  .dice-stats {
+    td, th {
+      font-size: 2rem;
+    }
+  }
+}

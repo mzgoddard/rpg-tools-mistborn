@@ -4,5 +4,6 @@ module.exports = function() {
     this.resource('dice.roller', {path: 'roller'}, function() {
       this.resource('dice.roller.index', {path: '/'});
     });
+    this.resource('dice.stats', {path: 'stats'});
   });
 };

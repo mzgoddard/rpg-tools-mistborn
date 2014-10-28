@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <th></th>
+    {{#each columns}}
+      <th>{{pair}}</th>
+    {{/each}}
+  </thead>
+  {{#each}}
+  <tr>
+    <td class="column-head">{{dice}}</td>
+    {{#each chances}}
+      <td>{{percent}}</td>
+    {{/each}}
+  </tr>
+  {{/each}}
+</table>
