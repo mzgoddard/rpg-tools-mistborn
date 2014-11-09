@@ -5,6 +5,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     webpack: {
       main: require('./webpack.config'),
+      'main-build': require('./webpack.config.build'),
     },
 
     'webpack-dev-server': {
@@ -27,4 +28,5 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['copy', 'webpack-dev-server']);
+  grunt.registerTask('release', ['copy', 'webpack:main-build']);
 };
