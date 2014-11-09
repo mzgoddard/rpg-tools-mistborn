@@ -36,8 +36,42 @@ const expand = exports.expand = function expand(pair, sides, dice, countSub2) {
   return sum;
 }
 
+const expandOnce = exports.expandOnce = function expandOnce(
+  pair, sides, dice, countSub2
+) {
+  if (dice === 0) {
+    return 1;
+  }
+  if (dice === 1) {
+    return sides;
+  }
+  if (sides === 1) {
+    return 1;
+  }
+  var sum = 0, k;
+  if (sides > pair) {
+    k = 2;
+    sum += binom(dice, k) * expandOnce(pair, sides - 1, k);
+  } else {
+    k = 0;
+    if (countSub2 || dice - k >= 2 || k >= 2) {
+      sum +=
+        binom(dice, k) *
+        expandOnce(pair, sides - 1, k, countSub2 || dice - k > 1);
+    }
+  }
+
+  return sum;
+}
+
 const probability = exports.probability = function probability(highest, dice) {
   return expand(6 - highest, 6, dice) / Math.pow(6, dice);
+}
+
+const probabilityOne = exports.probabilityOne = function probabilityOne(
+  highest, dice
+) {
+  return expandOnce(6 - highest, 6, dice) / Math.pow(6, dice);
 }
 
 exports.probabilityInvert0 = function probabilityInvert0(highest, dice) {

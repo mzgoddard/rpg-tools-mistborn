@@ -1,3 +1,5 @@
+const binom = require('../utils/dicemath').binom;
+const probabilityOne = require('../utils/dicemath').probabilityOne;
 const probabilityInvert0 = require('../utils/dicemath').probabilityInvert0;
 
 module.exports = Ember.ObjectController.extend({
@@ -9,9 +11,18 @@ module.exports = Ember.ObjectController.extend({
       for (var j = 0; j < 6; j++) {
         var probabilityValue = probabilityInvert0(j, i);
         var percent = Math.floor(probabilityValue * 100);
+        // var samePercent = Math.floor(binom(i, 2) / Math.pow(6, i) * 100);
+        var samePercent = percent;
+        if (j > 0 && j < 5) {
+          // samePercent = Math.floor(probabilityOne(j, i) * 100);
+          samePercent = Math.floor(
+            (probabilityValue - probabilityInvert0(j + 1, i)) * 100
+          );
+        }
         chances.push(Ember.Object.create({
           pair: j,
           percent: percent,
+          samePercent: samePercent,
         }));
       }
 
@@ -30,6 +41,18 @@ module.exports = Ember.ObjectController.extend({
     }
     return options;
   }.property(),
+
+  samePercentTable: function() {
+    return this.get('optionsTable').map(function(dice) {
+      var props = dice.getProperties(Ember.keys(dice));
+      props.chances = props.chances.map(function(chance) {
+        var props = chance.getProperties(Ember.keys(chance));
+        props.percent = props.samePercent;
+        return Ember.Object.create(props);
+      });
+      return Ember.Object.create(props);
+    });
+  }.property('optionsTable'),
 
   pairTable: function() {
     var options = [];

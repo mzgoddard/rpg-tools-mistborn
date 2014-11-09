@@ -33,7 +33,7 @@ var RollSet = Ember.Object.extend({
       var roll = this.get('rolls.' + i + '.roll');
       counts[roll - 1] = counts[roll - 1] ? counts[roll - 1] + 1 : 1;
     }
-    for (var i = 4; i > 0; i--) {
+    for (var i = 4; i >= 0; i--) {
       if (counts[i] >= 2) {
         return i + 1;
       }
